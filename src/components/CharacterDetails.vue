@@ -1,7 +1,11 @@
 <template>
   <div class="character-details-container">
-    <div v-if="loading" class="loading-container">
+    <div v-if="loading" class="loading-container" aria-live="polite">
       <q-spinner color="primary" size="50px" />
+    </div>
+    <div v-else-if="error" class="error-message" aria-live="assertive">
+      <q-icon name="error" color="negative" size="md" />
+      <span>Erro ao carregar personagem. Tente novamente.</span>
     </div>
     <div v-else>
       <q-card class="character-card">
@@ -85,13 +89,15 @@ export default {
       }
     };
 
+    // Exibe erro no console e pode ser usado para feedback visual
     watchEffect(() => {
       if (error.value) {
-        console.error("Erro GraphQL:", error.value);
+        // já tratado visualmente
+        // console.error("Erro GraphQL:", error.value);
       }
     });
 
-    return { character, loading, fetchCharacter };
+    return { character, loading, fetchCharacter, error };
   },
 };
 </script>
@@ -183,6 +189,16 @@ export default {
 }
 .episode-item:last-child {
   border-bottom: none;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff206e;
+  margin: 24px 0;
+  font-weight: bold;
+  justify-content: center;
 }
 
 @media (max-width: 600px) {

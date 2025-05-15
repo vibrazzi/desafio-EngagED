@@ -8,7 +8,6 @@
 </style>
 
 <script>
-// Componente de exemplo para exibir o logo do Quasar
 export default {
   name: 'HelloWorld'
 };

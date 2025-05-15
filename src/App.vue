@@ -3,7 +3,7 @@
     <q-header elevated class="header">
       <q-toolbar>
         <q-btn flat dense round @click="toggleDrawer" aria-label="Menu" icon="menu" />
-        <q-toolbar-title class="app-title">Rick and Morty App</q-toolbar-title>
+        <q-toolbar-title class="app-title">Rick and Morty</q-toolbar-title>
         <q-btn flat dense round :icon="isDarkMode ? 'brightness_7' : 'brightness_4'" @click="toggleTheme" aria-label="Alternar tema" />
       </q-toolbar>
     </q-header>

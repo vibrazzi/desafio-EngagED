@@ -1,22 +1,25 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <HeaderContainer>
-    <Title>Rick and Morty App</Title>
+  <AppHeaderContainer>
+    <Title>Rick and Morty</Title>
     <ThemeButton @click="toggleTheme">
       {{ isDarkMode ? 'Modo Claro' : 'Modo Escuro' }}
     </ThemeButton>
-  </HeaderContainer>
+  </AppHeaderContainer>
 </template>
 
 <script setup>
+// eslint-disable-next-line no-undef
+defineOptions({ name: 'TheHeader' });
 import styled from 'vue-styled-components';
 import { defineProps } from 'vue';
 
-const props = defineProps({
+defineProps({
   toggleTheme: Function,
   isDarkMode: Boolean,
 });
 
-const HeaderContainer = styled.header`
+const AppHeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
