@@ -1,5 +1,7 @@
 # rick-and-morty-app
 
+Aplicação Vue.js com Quasar Framework e Apollo Client para consumir a API do Rick and Morty.
+
 ## Project setup
 ```
 npm install
