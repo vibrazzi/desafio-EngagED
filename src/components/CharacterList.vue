@@ -4,9 +4,8 @@
       v-model="search"
       label="Buscar Personagens"
       outlined
-      debounce="300"
+      debounce="500"
       class="search-input"
-      @input="onSearchInput"
     />
     <q-list v-if="characters.length" class="character-grid">
       <q-item
@@ -34,16 +33,16 @@
     <q-pagination
       v-model="currentPage"
       :max="maxPages"
-      @update:model-value="fetchCharacters"
+      @update:model-value="onPageChange"
       class="pagination"
     />
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, watch } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { ref, watchEffect } from 'vue';
 
 const GET_CHARACTERS = gql`
   query ($page: Int, $name: String) {
@@ -63,52 +62,38 @@ const GET_CHARACTERS = gql`
   }
 `;
 
-export default {
-  setup() {
-    const search = ref('');
-    const currentPage = ref(1);
-    const characters = ref([]);
-    const maxPages = ref(1);
-    
-    const { result, loading, refetch, error } = useQuery(GET_CHARACTERS, {
-      page: currentPage.value,
-      name: search.value,
-    });
+const search = ref('');
+const currentPage = ref(1);
 
-    watchEffect(() => {
-      if (result.value) {
-        console.log("Dados dos personagens:", result.value);
-        characters.value = result.value?.characters?.results || [];
-        maxPages.value = result.value?.characters?.info?.pages || 1;
-      }
-    });
+const variables = ref({
+  page: currentPage.value,
+  name: search.value
+});
 
-    const fetchCharacters = async () => {
-      try {
-        await refetch({ page: currentPage.value, name: search.value });
-      } catch (err) {
-        console.error('Erro ao buscar personagens:', err);
-      }
-    };
+const { result, refetch } = useQuery(GET_CHARACTERS, variables);
 
-    const onSearchInput = () => {
-      currentPage.value = 1; // Reseta para a primeira página ao buscar
-      fetchCharacters();
-    };
+const characters = ref([]);
+const maxPages = ref(1);
 
-    watchEffect(() => {
-      if (error.value) {
-        console.error('Erro GraphQL:', error.value);
-      }
-    });
+watch([search, currentPage], ([newSearch, newPage]) => {
+  variables.value = { page: newPage, name: newSearch };
+  refetch();
+});
 
-    return { characters, search, currentPage, maxPages, loading, fetchCharacters, onSearchInput };
-  },
-};
+watch(result, () => {
+  characters.value = result.value?.characters?.results || [];
+  maxPages.value = result.value?.characters?.info?.pages || 1;
+});
+
+function onPageChange(page) {
+  currentPage.value = page;
+}
 </script>
 
 <style scoped>
 .character-list {
+  background: var(--background);
+  color: var(--text);
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -125,7 +110,9 @@ export default {
 }
 
 .character-card {
-  background-color: #FFEB3B; /* Amarelo */
+  background-color: var(--card-background);
+  color: var(--text);
+  border: 3px solid var(--card-border);
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -143,26 +130,44 @@ export default {
 }
 
 .character-name {
+  color: var(--accent);
   font-weight: bold;
   font-size: 18px;
-  color: #333;
 }
 
 .character-details {
   font-size: 14px;
-  color: #666;
+  color: var(--text);
 }
 
 .no-results {
   text-align: center;
   margin-top: 20px;
   font-size: 18px;
-  color: #999;
+  color: var(--text);
 }
 
 .pagination {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+.q-input__native {
+  background: var(--input-background);
+  color: var(--input-text);
+}
+
+.q-field__label {
+  color: var(--input-text);
+}
+
+.q-btn {
+  background: var(--button-background);
+  color: var(--button-text);
+}
+
+.q-btn:hover {
+  background: var(--button-hover);
 }
 </style>

@@ -1,0 +1,25 @@
+:root {
+  --background: #fff;           /* Azul escuro do espaço */
+  --text: #222;                 /* Amarelo Rick */
+  --header-background: #00b5cc;    /* Azul claro do portal */
+  --card-background: #fff;      /* Amarelo Rick */
+  --card-border: #00ff9d;          /* Verde do portal */
+  --accent: #ff206e;               /* Rosa vibrante */
+  --button-background: #00ff9d;    /* Verde do portal */
+  --button-text: #2b2d42;
+  --button-hover: #ff206e;
+  --input-background: #fff;
+  --input-text: #222; /* preto para modo claro */
+}
+[data-theme="dark"] {
+  --background: #fff;
+  --text: #00ff9d;
+  --header-background: #1e1e2f;
+  --card-background: #22223b;
+  --card-border: #f8f32b;
+  --accent: #ff206e;
+  --button-background: #f8f32b;
+  --button-text: #181825;
+  --button-hover: #00b5cc;
+  --input-background: #22223b;  
+}
